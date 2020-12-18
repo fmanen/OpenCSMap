@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <h1 class="w-75 p-3">
+                        Papers results
+                    </h1>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6">
+                        <b>Research topic:</b> {{ topic }} <br> 
+                        {% if results_by == "affiliation" %}
+                        <b>Affiliation name:</b> {{ affiliation }}
+                        <br>
+                        {% elif results_by == "country" %}
+                        <b>Country:</b> {{ affiliation }}
+                        <br>
+                        {% else %}
+                        <b>City:</b> {{ city }}
+                        <br>
+                        {% endif %}
+                        {% if authors %}
+                        <b>Author:</b> {{ authors }}
+                        <br>
+                        {% endif %}
+                        {% if type_of_pub == "inproceedings" %}
+                        <b>Type:</b> conference papers
+                        {% elif type_of_pub == "journal" %}
+                        <b>Type:</b> journal articles
+                        <br>
+                        {% endif %}
+                        {% if from_date or to_date %}
+                        <br>
+                        <b>Publication range:</b><br>
+                        {% if from_date %}<b>From:</b> {{ from_date }} {% endif %}{% if to_date %}<b>To:</b> {{ to_date }}{% endif %}
+                        {% endif %}
+                        </div>
+
+                        <div class="col-lg-4">
+                            <b>Total results:</b> {{ number_of_hits }}<br>
+                            <b>Author with most papers:</b> {{ top_author }}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    {% for result in results %}
+                    <table class="table">
+                        <thead>
+                            <h3>{{ result.title }}</h3>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Authors:</th>
+                                <td>
+                                    {% for author in result.authors %}
+                                    {% if forloop.counter == 1 %}
+                                    {{ author }}
+                                    {% else %}
+                                    , {{ author }}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Affiliation:</th>
+                                <td>{{result.affiliation_name}}, {{result.city}}, {{result.country}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Published in:</th>
+                                <td>
+                                    {% if result.type == "inproceedings" %}
+                                    {{ result.proceedingsName }}
+                                    {% else %}
+                                    {{ result.journal }} journal
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">DOI:</th>
+                                <td>
+                                    {% if result.doi %}
+                                    <a href="{{result.doi}}">{{ result.doi }}</a>
+                                    {% else %}
+                                    Not available
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Year:</th>
+                                <td>{{ result.year }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td>{{ organization.business_name|default_if_none:"" }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td>{{ organization.representative_name|default_if_none:"" }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
