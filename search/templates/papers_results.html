@@ -13,7 +13,9 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-6">
-                        <b>Research topic:</b> {{ topic }} <br> 
+                        {% if topic %}
+                        <b>Research topic:</b> {{ topic }} <br>
+                        {% endif %}
                         {% if results_by == "affiliation" %}
                         <b>Affiliation name:</b> {{ affiliation }}
                         <br>

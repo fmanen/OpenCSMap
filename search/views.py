@@ -8,61 +8,37 @@ from elasticsearch_dsl import Search, Q, A
 from collections import defaultdict
 
 from .forms import AdvancedSearchForm
-from .utils import create_advanced_query_body, create_simple_query_body, create_advanced_query_papers_body, simple_search_papers_results_body
-
-def simple_search(topic="", results_by=0):
-    client = Elasticsearch()
-    q = Q(
-            "match", title__english=topic
-        )
-    s = Search(using=client, index="papers_def").query(q)[0:10000]
-    response = s.execute()
-    search = get_results(response, results_by)
-    return search
+from .utils import create_advanced_query_body, create_simple_query_body, create_advanced_query_papers_body, simple_search_papers_results_body, create_all_research_query_body, simple_search_papers_all_results_body
 
 def advanced_search(request):
-    form = AdvancedSearchForm()
     years = range(1900,2021)
-    return render(request, 'advanced_search.html', {'form':form, 'years':years})
-
-def get_results(response, results_by):
-    results = defaultdict(dict)
-    for hit in response:
-        try:
-            if results_by == 0:
-                coord = hit.coord
-                name = hit.affiliation_name
-            elif results_by == 1:
-                coord = hit.cityCoord
-                name = hit.city
-            else:
-                coord = hit.countryCoord
-                name = hit.country
-            if not coord:
-                continue
-            results[name]['coord'] = coord
-            if not 'papers' in results[name]:
-                results[name]['papers'] = [{'title':hit.title, 'authors':hit.authors}]
-            else:
-                results[name]['papers'].append({'title':hit.title, 'authors':hit.authors})
-        except:
-            continue
-    return dict(results)
+    return render(request, 'advanced_search.html', {'years':years})
 
 def search_index(request):
     return render(request, 'index.html')
 
-def advanced_results(request):
-    if request.POST:
-        topic = request.POST.get('topic')
-        authors = request.POST.get('authors')
-        results_by = int(request.POST.get('results-by'))
-        print(results_by)
+def all_research(request):
+    client = Elasticsearch()
+    body = create_all_research_query_body()
+    s = Search(using=client, index="papers_def").update_from_dict(body)
 
-    aggregations = simple_search(topic, results_by)
+    t = s.execute()
+    affiliations = [t.aggregations.my_buckets.buckets]
 
-    return render(request, 'advanced_search_results.html', {'aggregations':aggregations, 'topic':topic, 'results':results_by})
+    after = t.aggregations.my_buckets.after_key
+    while True:
+        body['aggs']['my_buckets']['composite']['after'] = after
+        s = Search(using=client, index="papers_def").update_from_dict(body)
+        t = s.execute()
 
+        affiliations.append(t.aggregations.my_buckets.buckets)
+
+        try:
+            after = t.aggregations.my_buckets.after_key
+        except:
+            break
+
+    return render(request, 'results.html', {'affiliations':affiliations, 'all':True})
 
 def results(request):
     if request.POST:
@@ -169,6 +145,28 @@ def simple_search_papers_results_view(request, topic, affiliation):
         'results':results,
         'affiliation':affiliation,
         'topic':topic,
+        'results_by':"affiliation",
+        'top_author':top_author,
+        'number_of_hits':len(all_hits)
+        })
+
+def simple_search_papers_all_results_view(request, affiliation):
+    client = Elasticsearch()
+    body = simple_search_papers_all_results_body(affiliation)
+    s = Search(using=client, index="papers_def").update_from_dict(body)
+
+    t = s.execute()
+
+    all_hits = t.hits.hits
+    results = []
+    for hit in all_hits:
+        results.append(hit["_source"])
+
+    top_author = t.aggregations.Authors.buckets[0].key
+
+    return render(request, 'papers_results.html', {
+        'results':results,
+        'affiliation':affiliation,
         'results_by':"affiliation",
         'top_author':top_author,
         'number_of_hits':len(all_hits)

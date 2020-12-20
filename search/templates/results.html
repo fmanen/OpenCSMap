@@ -1,6 +1,11 @@
 
 {% extends "base.html" %}
 {% load static %}
+{% if all %}
+{% block all_search_item %}
+    <li class="nav-item active">
+{% endblock %}
+{% endif %}
 {% block content %}
 <head>
 
@@ -48,7 +53,11 @@ html, body
       <div class="container fill">
         <div class="row">
           <div class="col-xl-9 mx-auto">
+            {% if all %}
+            <h1 class="mb-5">All Research in the World by Affiliation.</h1>
+            {% else %}
             <h1 class="mb-5">Your results for {{topic}}.</h1>
+            {% endif %}
           </div>
         </div>
         <form>
@@ -74,12 +83,19 @@ html, body
 
         marker = L.marker([{{ affiliation.key.Lat }}, {{ affiliation.key.Long }}])
         
+        {% if all %}
+        marker.bindPopup(`<b>{{affiliation.key.Affiliation}}</b>
+                          <br />{{affiliation.key.City}},
+                          {{affiliation.key.Country}}<br />
+                          <a href="{% url 'search:simple_search_papers_results' affiliation.key.Affiliation %}"">{{affiliation.doc_count}} {% if affiliation.doc_count == 1 %} result. {% else %} results. {% endif %}</a>
+                        `);
+        {% else %}
         marker.bindPopup(`<b>{{affiliation.key.Affiliation}}</b>
                           <br />{{affiliation.key.City}},
                           {{affiliation.key.Country}}<br />
                           <a href="{% url 'search:simple_search_papers_results' topic affiliation.key.Affiliation %}"">{{affiliation.doc_count}} {% if affiliation.doc_count == 1 %} result. {% else %} results. {% endif %}</a>
                         `);
-
+        {% endif %}
         
         markers.addLayer(marker);
         

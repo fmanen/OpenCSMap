@@ -44,6 +44,11 @@
         {% endblock %}
           <a class="nav-link" href="{% url 'search:advanced_search' %}">Advanced Search</a>
         </li>
+        {% block all_search_item %}
+        <li class="nav-item">
+        {% endblock %}
+          <a class="nav-link" href="{% url 'search:all_research' %}">All Research in the World</a>
+        </li>
         {% block about_item %}
         <li class="nav-item">
         {% endblock %}

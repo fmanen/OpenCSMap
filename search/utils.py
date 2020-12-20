@@ -140,6 +140,31 @@ def simple_search_papers_results_body(topic,affiliation):
 
     return body
 
+def simple_search_papers_all_results_body(affiliation):
+    body = \
+    {
+        "size":10000,
+        "query": {
+            "bool": {
+                "filter": [
+                    { "term":  { "affiliation_name.raw": affiliation }}
+                ]
+            }
+        },
+        "aggs":{
+        "Authors":{
+        "terms":{
+            "field":"authors.raw"
+        }
+        }
+    },
+    "_source":{
+    "includes": ["title","authors",  "type", "year", "journal", "proceedingsName", "city", "country", "affiliation_name",  "doi"]
+    }
+    }
+
+    return body
+
 def create_advanced_query_papers_body(topic, authors, results_by, type_of_pub, affiliation, city, from_date, to_date):
 
     body = \
@@ -202,5 +227,60 @@ def create_advanced_query_papers_body(topic, authors, results_by, type_of_pub, a
     if type_of_pub in ['inproceedings','article']:
         type_dict = { "term":  { "type": type_of_pub }}
         body['query']['bool']['filter'].append(type_dict)
+
+    return body
+
+def create_all_research_query_body():
+    body = \
+    {
+        "size":0,
+        "query": {
+        "match_all": {}
+        },
+        "aggs": {
+            "my_buckets": {
+            "composite": {
+                "size":1000,
+                "sources": [
+                {
+                    "Affiliation": {
+                    "terms": {
+                        "field": "affiliation_name.raw"
+                    }
+                    }
+                },
+                {
+                    "Lat": {
+                    "terms": {
+                        "field": "affLat"
+                    }
+                    }
+                },
+                {
+                    "Long": {
+                    "terms": {
+                        "field": "affLong"
+                    }
+                    }
+                },
+                {
+                    "Country": {
+                    "terms": {
+                        "field": "country.raw"
+                    }
+                    }
+                },
+                {
+                    "City": {
+                    "terms": {
+                        "field": "city.raw"
+                    }
+                    }
+                }
+            ]
+            }
+            }
+        }
+    }
 
     return body
