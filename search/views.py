@@ -18,12 +18,19 @@ def search_index(request):
     return render(request, 'index.html')
 
 def all_research(request):
+    l = 0
+    n = 0
     client = Elasticsearch()
     body = create_all_research_query_body()
     s = Search(using=client, index="papers_def").update_from_dict(body)
 
     t = s.execute()
-    affiliations = [t.aggregations.my_buckets.buckets]
+    aggs = t.aggregations.my_buckets.buckets
+    affiliations = [aggs]
+
+    for aff in aggs:
+        n += aff.doc_count
+    l += len(aggs)
 
     after = t.aggregations.my_buckets.after_key
     while True:
@@ -31,14 +38,27 @@ def all_research(request):
         s = Search(using=client, index="papers_def").update_from_dict(body)
         t = s.execute()
 
-        affiliations.append(t.aggregations.my_buckets.buckets)
+        aggs = t.aggregations.my_buckets.buckets
+        for aff in aggs:
+            n += aff.doc_count
+        affiliations.append(aggs)
+        l += len(aggs)
 
         try:
             after = t.aggregations.my_buckets.after_key
         except:
             break
 
-    return render(request, 'results.html', {'affiliations':affiliations, 'all':True})
+    return render(
+        request,
+        'results.html',
+        {
+            'affiliations':affiliations,
+            'all':True,
+            'n_affiliations':format(l,',d'), 
+            'n_papers':format(n,',d')
+        }
+        )
 
 def results(request):
     if request.POST:
@@ -55,12 +75,20 @@ def simple_aggregations_search_view(request):
     if request.POST:
         topic = request.POST.get('topic')
 
+
+    l = 0
+    n = 0
     client = Elasticsearch()
     body = create_simple_query_body(topic)
     s = Search(using=client, index="papers_def").update_from_dict(body)
 
     t = s.execute()
-    affiliations = [t.aggregations.my_buckets.buckets]
+    aggs = t.aggregations.my_buckets.buckets
+    affiliations = [aggs]
+
+    for aff in aggs:
+        n += aff.doc_count
+    l += len(aggs)
 
     after = t.aggregations.my_buckets.after_key
     while True:
@@ -68,14 +96,27 @@ def simple_aggregations_search_view(request):
         s = Search(using=client, index="papers_def").update_from_dict(body)
         t = s.execute()
 
-        affiliations.append(t.aggregations.my_buckets.buckets)
+        aggs = t.aggregations.my_buckets.buckets
+        affiliations.append(aggs)
+        for aff in aggs:
+            n += aff.doc_count
+        l += len(aggs)
 
         try:
             after = t.aggregations.my_buckets.after_key
         except:
             break
 
-    return render(request, 'results.html', {'affiliations':affiliations, 'topic':topic})
+    return render(
+        request,
+        'results.html',
+        {
+            'affiliations':affiliations, 
+            'topic':topic, 
+            'n_affiliations':format(l,',d'), 
+            'n_papers':format(n,',d')
+        }
+        )
 
 
 
@@ -89,6 +130,9 @@ def aggregations_for_advanced_search_view(request):
         to_date = int(request.POST.get('to-date'))
 
 
+
+    l = 0
+    n = 0
     body = create_advanced_query_body(topic, authors, results_by, type_of_pub, from_date, to_date)
     body = eval(body)
 
@@ -97,8 +141,14 @@ def aggregations_for_advanced_search_view(request):
     s = Search(using=client, index="papers_def").update_from_dict(body)
 
     t = s.execute()
-    affiliations = [t.aggregations.my_buckets.buckets]
-    
+
+    aggs = t.aggregations.my_buckets.buckets
+    affiliations = [aggs]
+
+    for aff in aggs:
+        n += aff.doc_count
+    l += len(aggs)
+
     try:
         after = t.aggregations.my_buckets.after_key
     except:
@@ -108,7 +158,11 @@ def aggregations_for_advanced_search_view(request):
         s = Search(using=client, index="papers_def").update_from_dict(body)
         t = s.execute()
 
-        affiliations.append(t.aggregations.my_buckets.buckets)
+        aggs = t.aggregations.my_buckets.buckets
+        affiliations.append(aggs)
+        for aff in aggs:
+            n += aff.doc_count
+        l += len(aggs)
 
         try:
             after = t.aggregations.my_buckets.after_key
@@ -122,7 +176,9 @@ def aggregations_for_advanced_search_view(request):
         'authors':authors if authors else None,
         'type_of_pub':type_of_pub,
         'to_date':to_date,
-        'from_date':from_date
+        'from_date':from_date,
+        'n_affiliations':format(l, ',d'),
+        'n_papers':format(n, ',d')
         })
 
 

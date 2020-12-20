@@ -61,7 +61,7 @@ def create_simple_query_body(topic):
 
 def create_advanced_query_body(topic, authors, results_by, type_of_pub, from_date, to_date):
 
-    
+
     must_topic = """"should": [{"match":{ "title": {"query":"%s", "operator": "and"}}}, {"match":{ "proceedingsName": {"query":"%s", "operator": "and"}}}], "minimum_should_match": 1, """ % (topic,topic)
     print(must_topic)
     if not authors:
@@ -101,7 +101,7 @@ def create_advanced_query_body(topic, authors, results_by, type_of_pub, from_dat
         lat = """{"Lat": {"terms": {"field": "affLat"}}},"""
         long = """{"Long": {"terms": {"field": "affLong"}}}"""
 
-    
+
     query_part = """"query": {"bool": {%s%s"filter": [%s%s]}},""" % (must_topic, should_author, term_filter, range_filter)
     aggs_part = """"aggs": {"my_buckets": {"composite": {"size":1000,"sources": [%s%s%s]}}}""" % (place_agg, lat, long)
 
@@ -118,7 +118,8 @@ def simple_search_papers_results_body(topic,affiliation):
             "bool": {
                 "should": [
                     {"match":{ "title": {"query":topic, "operator": "and"}}},
-                    {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}}
+                    {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}},
+                    {"match":{ "journal": {"query":topic, "operator": "and"}}}
                 ],
                 "minimum_should_match": 1,
                 "filter": [
@@ -174,7 +175,8 @@ def create_advanced_query_papers_body(topic, authors, results_by, type_of_pub, a
         "bool": {
         "should": [
             {"match":{ "title": {"query":topic, "operator": "and"}}},
-            {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}}
+            {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}},
+            {"match":{ "journal": {"query":topic, "operator": "and"}}}
         ],
         "minimum_should_match": 1,
         "must": [

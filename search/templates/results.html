@@ -1,11 +1,11 @@
 
 {% extends "base.html" %}
 {% load static %}
-{% if all %}
 {% block all_search_item %}
+    {% if all %}
     <li class="nav-item active">
+    {% endif %}
 {% endblock %}
-{% endif %}
 {% block content %}
 <head>
 
@@ -48,16 +48,35 @@ html, body
 </head>
 <body>
     <br>
-    <header class="text-black text-center">
+    <header class="text-black">
       <div class="overlay"></div>
       <div class="container fill">
         <div class="row">
-          <div class="col-xl-9 mx-auto">
-            {% if all %}
-            <h1 class="mb-5">All Research in the World by Affiliation.</h1>
-            {% else %}
-            <h1 class="mb-5">Your results for {{topic}}.</h1>
-            {% endif %}
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+            <div class="card">
+                <div class="card-header text-center">
+                    {% if all %}
+                    <h1>All Research in the World by Affiliation</h1>
+                    {% else %}
+                    <h1>Search</h1>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    {% if topic %}
+                    <div class="col-lg-4">
+                      <p><b>Research topic:</b> {{ topic }}</p>
+                    </div>
+                    {% endif %}
+                    <div class="col-lg-4">
+                      <p><b># Affiliations found:</b> {{ n_affiliations }}</p>
+                    </div>
+                    <div class="col-lg-4">
+                      <p><b># Papers found:</b> {{ n_papers }}</p>
+                    </div>
+                  </div>
+                </div>
+            </div>
           </div>
         </div>
         <form>

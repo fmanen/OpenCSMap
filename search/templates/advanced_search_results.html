@@ -46,12 +46,54 @@ html, body
 </head>
 <body>
     <br>
-    <header class="text-black text-center">
+    <header class="text-black">
       <div class="overlay"></div>
       <div class="container fill">
         <div class="row">
-          <div class="col-xl-9 mx-auto">
-            <h1 class="mb-5">Your results for {{topic}}.</h1>
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Advanced search</h1>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <b>Research topic:</b> {{ topic }}
+                      <br>
+                      {% if authors %}
+                      <b>Author:</b> {{ authors }}
+                      <br>
+                      {% endif %}
+                      {% if type_of_pub == "inproceedings" %}
+                      <b>Type:</b> conference papers
+                      {% elif type_of_pub == "article" %}
+                      <b>Type:</b> journal articles
+                      <br>
+                      {% endif %}
+                      {% if from_date or to_date %}
+                      <b>Publication range:</b><br>
+                      {% if from_date %}<b>From:</b> {{ from_date }} {% endif %}{% if to_date %}<b>To:</b> {{ to_date }}{% endif %}
+                      {% endif %}
+                    </div>
+                    <div class="col-lg-4">
+                      {% if results_by == "affiliation" %}
+                      <p><b># Affiliations found:</b> {{ n_affiliations }}</p>
+                      <br>
+                      {% elif results_by == "country" %}
+                      <p><b># Countries found:</b> {{ n_affiliations }}</p>
+                      <br>
+                      {% else %}
+                      <p><b># Cities found:</b> {{ n_affiliations }}</p>
+                      <br>
+                      {% endif %}
+                      
+                    </div>
+                    <div class="col-lg-4">
+                      <p><b># Papers found:</b> {{ n_papers }}</p>
+                    </div>
+                  </div>
+                </div>
+            </div>
           </div>
         </div>
         <form>
