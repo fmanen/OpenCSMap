@@ -8,7 +8,7 @@
 	<title>OpenCSMap</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
 </head>
 <body>
     <br>
@@ -43,6 +43,7 @@
                         <option value={{i}}>{{ i }}</option>
                         {% endfor %}
                     </select>
+                    <span id="error-from-date"></span>
                 </div>
                 <div class="col-md-2">
                     <b>To:</b> <select class="form-control" id="to-date" name="to-date">
@@ -51,6 +52,7 @@
                         <option value={{i}}>{{ i }}</option>
                         {% endfor %}
                     </select>
+                    <span id="error-to-date"></span>
                 </div>
             </div>
             <br>
@@ -103,100 +105,57 @@
                     </div>
                     <br>
                     <br>
-                    <button onclick="" type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
+                    <button id="submit-button" onclick="" type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
                 </div>
             </div>
         </form>
-    
-        <script>
 
-            function resetErrors() {
-                document.getElementById("error-fecha-inicio").innerHTML = '';
-                document.getElementById("error-fecha-fin").innerHTML = '';
-                document.getElementById("error-hora-inicio").innerHTML = '';
-                document.getElementById("error-hora-fin").innerHTML = '';
-                document.getElementById("submit-button").disabled = false;
-            }
-    
-    
-            var ini = 0;
-            var fin = 0;
-            var start = Date();
-            var end = Date();
-    
-            var hini = 0;
-            var hfin = 0;
-            var hstart = Date();
-            var hend = Date()
-    
-            $('#from-date').on('change', function(){
-                start = $('#from-date').val()
-                if(end < start) {
-                    document.getElementById("error-fecha-inicio").innerHTML = 'Debe ser anterior a fecha de fin';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else if(end.valueOf() == start.valueOf() && hend < hstart) {
-                    document.getElementById("error-hora-fin").innerHTML = 'Debe ser posterior a hora de inicio';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else{
-                   resetErrors();
-                }
-    
-            });
-    
-            $('#to-date').on('change', function(){
-                fin = $('#fecha-fin-actividad').val()
-                end = new Date(fin);
-                if(end < start) {
-                    document.getElementById("error-fecha-fin").innerHTML = 'Debe ser posterior a fecha de inicio';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else if(end.valueOf() == start.valueOf() && hend < hstart) {
-                    document.getElementById("error-hora-fin").innerHTML = 'Debe ser posterior a hora de inicio';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else{
-                   resetErrors();
-                }
-            });
-    
-            $('#hora-inicio-actividad').on('change', function(){
-                hini = $('#hora-inicio-actividad').val()
-                hstart = Date.parse("01/01/2001 ".concat(hini))
-                if(end.valueOf() == start.valueOf() && hend < hstart) {
-                    document.getElementById("error-hora-inicio").innerHTML = 'Debe ser anterior a hora de fin';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else if (end.valueOf() < start.valueOf()){
-                    document.getElementById("error-fecha-fin").innerHTML = 'Debe ser posterior a fecha de inicio';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else{
-                   resetErrors();
-                }
-            });
-    
-            $('#hora-fin-actividad').on('change', function(){
-                hfin = $('#hora-fin-actividad').val()
-                hend = Date.parse("01/01/2001 ".concat(hfin))
-                if(end.valueOf() == start.valueOf() && hend < hstart) {
-                    document.getElementById("error-hora-fin").innerHTML = 'Debe ser posterior a fecha de inicio';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else if (end.valueOf() < start.valueOf()){
-                    document.getElementById("error-fecha-fin").innerHTML = 'Debe ser posterior a fecha de inicio';
-                    document.getElementById("submit-button").disabled = true;
-                }
-                else{
-                   resetErrors();
-                }
-            });
-    
-        </script>
 
 
 
 </body>
 
+{% endblock %}
+{% block specific_js %}
+<script>
+
+            
+
+    var start = 0
+    var end = 0
+
+
+    function resetErrors() {
+            document.getElementById("error-from-date").innerHTML = '';
+            document.getElementById("error-to-date").innerHTML = '';
+            document.getElementById("submit-button").disabled = false;
+        }
+
+    $('#from-date').on('change', function(){
+        start = $('#from-date').val()
+        end = $('#to-date').val()
+        if (end != 0 && end < start){
+            document.getElementById("error-from-date").innerHTML = 'Must be less than "To" year';
+            document.getElementById("submit-button").disabled = true;
+        }
+        else {
+            resetErrors()
+        }
+    });
+
+    $('#to-date').on('change', function(){
+        start = $('#from-date').val()
+        end = $('#to-date').val()
+        if (end != 0 && end < start){
+            document.getElementById("error-to-date").innerHTML = 'Must be greater than "From" year';
+            document.getElementById("submit-button").disabled = true;
+        }
+        else {
+            resetErrors()
+        }
+    });
+
+
+
+</script>
 {% endblock %}

@@ -60,21 +60,15 @@ def all_research(request):
         }
         )
 
-def results(request):
-    if request.POST:
-        topic = request.POST.get('topic')
-
-    if not topic:
-        return redirect('search:search')
-
-    affiliations = simple_search(topic)
-    return render(request, 'results.html', {'affiliations':affiliations, 'topic':topic})
-
 
 def simple_aggregations_search_view(request):
     if request.POST:
         topic = request.POST.get('topic')
 
+    else:
+        return redirect('search:search')
+    if not topic:
+        return redirect('search:search')
 
     l = 0
     n = 0
@@ -111,9 +105,9 @@ def simple_aggregations_search_view(request):
         request,
         'results.html',
         {
-            'affiliations':affiliations, 
-            'topic':topic, 
-            'n_affiliations':format(l,',d'), 
+            'affiliations':affiliations,
+            'topic':topic,
+            'n_affiliations':format(l,',d'),
             'n_papers':format(n,',d')
         }
         )
@@ -129,7 +123,8 @@ def aggregations_for_advanced_search_view(request):
         from_date = int(request.POST.get('from-date'))
         to_date = int(request.POST.get('to-date'))
 
-
+    else:
+        return redirect('search:advanced_search')
 
     l = 0
     n = 0
