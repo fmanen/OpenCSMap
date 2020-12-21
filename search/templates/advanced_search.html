@@ -12,103 +12,111 @@
 </head>
 <body>
     <br>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
-                <h1>Advanced Search</h1>
-            </div>
+    <div class="overlay"></div>
+    <div class="container fill">
+    <div class="row">
+        <div class="col-md-10 col-lg-8 col-xl-8 mx-auto">
+          <div class="card">
+              <div class="card-header text-center">
+                <h2>Advanced Search</h2>
+              </div>
+              <div class="card-body">
+                <form action="/search/advanced_search_results" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <b>Research topic:</b>
+                        </div>
+                        <div class="col-md-4">
+                            <b>Publication range:</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <br>
+                            <input required type="text" class="form-control"
+                                                name="topic" id="topic">
+                        </div>
+                        <div class="col-md-2">
+                            <b>From:</b> <select class="form-control" id="from-date" name="from-date">
+                                <option value=0>---</option>
+                                {% for i in years %}
+                                <option value={{i}}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <span id="error-from-date"></span>
+                        </div>
+                        <div class="col-md-2">
+                            <b>To:</b> <select class="form-control" id="to-date" name="to-date">
+                                <option value=0>---</option>
+                                {% for i in years %}
+                                <option value={{i}}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <span id="error-to-date"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <b>Author:</b>
+                        </div>
+                        <div class="col-md-2">
+                            <b>Aggregate results by:</b>
+                        </div>
+                        <div class="col-md-2">
+                            <b>Type of publication:</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control"
+                            name="authors" id="authors" >
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="results-by" id="affiliation" value="affiliation"
+                                checked="checked">
+                                <label class="form-check-label" for="inlineRadio0">Affiliation</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="results-by" id="city" value="city">
+                                <label class="form-check-label" for="inlineRadio0">City</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="results-by" id="country" value="country">
+                                <label class="form-check-label" for="inlineRadio0">Country</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type-of-pub" id="all" value="all"
+                                checked="checked">
+                                <label class="form-check-label" for="inlineRadio1">All</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type-of-pub" id="inproceedings" value="inproceedings">
+                                <label class="form-check-label" for="inlineRadio1">Inproceedings</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type-of-pub" id="article" value="article">
+                                <label class="form-check-label" for="inlineRadio1">Journal</label>
+                            </div>
+                            <br>
+                            <br>
+                            <button id="submit-button" onclick="" type="submit" class="btn btn-lg btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+              </div>
+          </div>
         </div>
-        <form action="/search/advanced_search_results" method="post">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-4">
-                    <b>Research topic:</b>
-                </div>
-                <div class="col-md-4">
-                    <b>Publication range:</b>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-4">
-                    <br>
-                    <input required type="text" class="form-control"
-                                        name="topic" id="topic">
-                </div>
-                <div class="col-md-2">
-                    <b>From:</b> <select class="form-control" id="from-date" name="from-date">
-                        <option value=0>---</option>
-                        {% for i in years %}
-                        <option value={{i}}>{{ i }}</option>
-                        {% endfor %}
-                    </select>
-                    <span id="error-from-date"></span>
-                </div>
-                <div class="col-md-2">
-                    <b>To:</b> <select class="form-control" id="to-date" name="to-date">
-                        <option value=0>---</option>
-                        {% for i in years %}
-                        <option value={{i}}>{{ i }}</option>
-                        {% endfor %}
-                    </select>
-                    <span id="error-to-date"></span>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-4">
-                    <b>Author(s):</b>
-                </div>
-                <div class="col-md-2">
-                    <b>Aggregate results by:</b>
-                </div>
-                <div class="col-md-2">
-                    <b>Type of publication:</b>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-4">
-                    <input type="text" class="form-control"
-                    name="authors" id="authors" >
-                </div>
-                <div class="col-md-2">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="results-by" id="affiliation" value="affiliation"
-                        checked="checked">
-                        <label class="form-check-label" for="inlineRadio0">Affiliation</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="results-by" id="city" value="city">
-                        <label class="form-check-label" for="inlineRadio0">City</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="results-by" id="country" value="country">
-                        <label class="form-check-label" for="inlineRadio0">Country</label>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="type-of-pub" id="all" value="all"
-                        checked="checked">
-                        <label class="form-check-label" for="inlineRadio1">All</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="type-of-pub" id="inproceedings" value="inproceedings">
-                        <label class="form-check-label" for="inlineRadio1">Inproceedings</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="type-of-pub" id="article" value="article">
-                        <label class="form-check-label" for="inlineRadio1">Journal</label>
-                    </div>
-                    <br>
-                    <br>
-                    <button id="submit-button" onclick="" type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
-                </div>
-            </div>
-        </form>
+        </div>
+    </div>
 
 
 
@@ -118,8 +126,6 @@
 {% endblock %}
 {% block specific_js %}
 <script>
-
-            
 
     var start = 0
     var end = 0
@@ -135,7 +141,7 @@
         start = $('#from-date').val()
         end = $('#to-date').val()
         if (end != 0 && end < start){
-            document.getElementById("error-from-date").innerHTML = 'Must be less than "To" year';
+            document.getElementById("error-from-date").innerHTML = '<font color="red"><b>Must be less than "To" year</b></font>';
             document.getElementById("submit-button").disabled = true;
         }
         else {
@@ -147,7 +153,7 @@
         start = $('#from-date').val()
         end = $('#to-date').val()
         if (end != 0 && end < start){
-            document.getElementById("error-to-date").innerHTML = 'Must be greater than "From" year';
+            document.getElementById("error-to-date").innerHTML = '<font color="red"><b>Must be greater than "From" year</b></font>';
             document.getElementById("submit-button").disabled = true;
         }
         else {

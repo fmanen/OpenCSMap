@@ -56,9 +56,9 @@ html, body
             <div class="card">
                 <div class="card-header text-center">
                     {% if all %}
-                    <h1>All Research in the World by Affiliation</h1>
+                    <h2>All Research in the World by Affiliation</h2>
                     {% else %}
-                    <h1>Search</h1>
+                    <h2>Search</h2>
                     {% endif %}
                 </div>
                 <div class="card-body">
@@ -69,10 +69,10 @@ html, body
                     </div>
                     {% endif %}
                     <div class="col-lg-4">
-                      <p><b># Affiliations found:</b> {{ n_affiliations }}</p>
+                      <p><b>Affiliations found:</b> {{ n_affiliations }}</p>
                     </div>
                     <div class="col-lg-4">
-                      <p><b># Papers found:</b> {{ n_papers }}</p>
+                      <p><b>Papers found:</b> {{ n_papers }}</p>
                     </div>
                   </div>
                 </div>
@@ -96,12 +96,12 @@ html, body
         attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
       }).addTo(mymap);
       var markers = L.markerClusterGroup();
-      
+
         {% for l in affiliations %}
         {% for affiliation in l %}
 
         marker = L.marker([{{ affiliation.key.Lat }}, {{ affiliation.key.Long }}])
-        
+
         {% if all %}
         marker.bindPopup(`<b>{{affiliation.key.Affiliation}}</b>
                           <br />{{affiliation.key.City}},
@@ -115,9 +115,9 @@ html, body
                           <a href="{% url 'search:simple_search_papers_results' topic affiliation.key.Affiliation %}"">{{affiliation.doc_count}} {% if affiliation.doc_count == 1 %} result. {% else %} results. {% endif %}</a>
                         `);
         {% endif %}
-        
+
         markers.addLayer(marker);
-        
+
         {% endfor %}
         {% endfor %}
         mymap.addLayer(markers);
