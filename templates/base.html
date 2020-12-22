@@ -52,9 +52,14 @@
         {% block about_item %}
         <li class="nav-item">
         {% endblock %}
-          <a class="nav-link" href="{% url 'search:search' %}">About</a>
+          <a class="nav-link" href="{% url 'search:about' %}">About</a>
         </li>
       </ul>
+      <form class="form-inline my-2 my-lg-0" method="post" action="/search/results">
+        {% csrf_token %}
+        <input class="form-control mr-sm-2" name="topic" id="topic" type="search" placeholder="Enter a CS research topic..." aria-label="Search">
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+      </form>
     </div>
   </div>
   </nav>

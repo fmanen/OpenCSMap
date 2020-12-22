@@ -22,7 +22,7 @@
     #mapid
 {
     width: 100px;
-    height: 600px;
+    height: 500px;
     min-height: 100%;
     min-width: 100%;
     display: block;
@@ -52,10 +52,14 @@ html, body
         <div class="row">
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
             <div class="card">
-                <div class="card-header text-center">
-                    <h2>Advanced Search</h2>
-                </div>
                 <div class="card-body">
+                  {% if results_by == 'affiliation' %}
+                  <h4>Showing affiliations worlwide</h4>
+                  {% elif results_by == 'country' %}
+                  <h4>Showing countries worlwide</h4>
+                  {% else %}
+                  <h4>Showing cities worlwide</h4>
+                  {% endif %}
                   <div class="row">
                     <div class="col-lg-4">
                       <b>Research topic:</b> {{ topic }}

@@ -5,6 +5,7 @@ app_name = 'search'
 
 urlpatterns = [
     path('', views.search_index, name='search'),
+    path('about', views.about, name='about'),
     path('results', views.simple_aggregations_search_view, name='results'),
     path('advanced_search', views.advanced_search, name='advanced_search'),
     path('all_research', views.all_research, name='all_research'),

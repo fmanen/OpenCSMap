@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block about_item %}
+    <li class="nav-item active">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="w-75 p-3">
+                        About
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p>OpenCSMap is a system for geolocate Computer Science papers.
+                      Our main goal is to generate geograhical information about the papers and show
+                      how Computer Science research is advancing all over the world.
+                      How do we do this? Our work is based on <a href="https://dblp.org">DBLP</a> database. We used this
+                      data to find authors' affiliations, and then linked a paper with an
+                      affiliation, based on their authors information. For simplicity, we linked a paper
+                      with only one affiliation for now. We are looking forward to improve this in the future. :)
+                    </p>
+                    <h3>How does a search work?</h3>
+                    <p>Our search is a text search. The system looks the terms of interest on title of the papers, 
+                      title of journals and title of conferences.</p>
+                    <h3>Why my paper isn't on the map?</h3>
+                    <p>That's because we couldn't find an affiliation for any of the authors of the paper.</p>
+                    <h3>Why some authors have a '000X' number next to their names?</h3>
+                    <p>Because DBLP uses a number to diferentiate authors with the exact same name. </p>
+                    <br>
+                    That's all for now. This the first version of system so please use
+                    <a href="mailto:felipe.manen@dcc.uchile.cl">felipe.manen@dcc.uchile.cl</a> for all inquiries.
+                    <br>
+                    <br>
+                    Greetings from Chile.
+                    <br>
+                    <b>OpenCSMap team.</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -17,6 +17,9 @@ def advanced_search(request):
 def search_index(request):
     return render(request, 'index.html')
 
+def about(request):
+    return render(request, 'about.html')
+
 def all_research(request):
     l = 0
     n = 0
@@ -84,8 +87,12 @@ def simple_aggregations_search_view(request):
         n += aff.doc_count
     l += len(aggs)
 
-    after = t.aggregations.my_buckets.after_key
-    while True:
+    try:
+        after = t.aggregations.my_buckets.after_key
+    except:
+        after = ""
+
+    while after:
         body['aggs']['my_buckets']['composite']['after'] = after
         s = Search(using=client, index="papers_def").update_from_dict(body)
         t = s.execute()

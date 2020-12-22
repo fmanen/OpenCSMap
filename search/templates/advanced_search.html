@@ -23,61 +23,21 @@
               <div class="card-body">
                 <form action="/search/advanced_search_results" method="post">
                     {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4">
-                            <b>Research topic:</b>
-                        </div>
-                        <div class="col-md-4">
-                            <b>Publication range:</b>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4">
-                            <br>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="topic"><b>Research topic:</b></label>
                             <input required type="text" class="form-control"
                                                 name="topic" id="topic">
                         </div>
-                        <div class="col-md-2">
-                            <b>From:</b> <select class="form-control" id="from-date" name="from-date">
-                                <option value=0>---</option>
-                                {% for i in years %}
-                                <option value={{i}}>{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <span id="error-from-date"></span>
-                        </div>
-                        <div class="col-md-2">
-                            <b>To:</b> <select class="form-control" id="to-date" name="to-date">
-                                <option value=0>---</option>
-                                {% for i in years %}
-                                <option value={{i}}>{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <span id="error-to-date"></span>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4">
-                            <b>Author:</b>
-                        </div>
-                        <div class="col-md-2">
-                            <b>Aggregate results by:</b>
-                        </div>
-                        <div class="col-md-2">
-                            <b>Type of publication:</b>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4">
+                        <div class="form-group col-md-6">
+                            <label for="authors"><b>Author:</b></label>
                             <input type="text" class="form-control"
                             name="authors" id="authors" >
                         </div>
-                        <div class="col-md-2">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="results-by"><b>Aggregate results by:</b></label>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="results-by" id="affiliation" value="affiliation"
                                 checked="checked">
@@ -92,7 +52,8 @@
                                 <label class="form-check-label" for="inlineRadio0">Country</label>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="form-group col-md-3">
+                            <label for="type-of-pub"><b>Type of publication:</b></label>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="type-of-pub" id="all" value="all"
                                 checked="checked">
@@ -106,9 +67,32 @@
                                 <input class="form-check-input" type="radio" name="type-of-pub" id="article" value="article">
                                 <label class="form-check-label" for="inlineRadio1">Journal</label>
                             </div>
+                            </div>
+                        <div class="form-group col-md-3">
+                            <b>Publication range:</b>
                             <br>
+                            <label for="from-date">From:</label>
+                            <select class="form-control" id="from-date" name="from-date">
+                                <option value=0>---</option>
+                                {% for i in years %}
+                                <option value={{i}}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <span id="error-from-date"></span>
+                        </div>
+                        <div class="form-group col-md-3">
                             <br>
-                            <button id="submit-button" onclick="" type="submit" class="btn btn-lg btn-primary">Search</button>
+                            <label for="to-date">To:</label>
+                            <select class="form-control" id="to-date" name="to-date">
+                                <option value=0>---</option>
+                                {% for i in years %}
+                                <option value={{i}}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <span id="error-to-date"></span>
+                            <br><br>
+                            <button id="submit-button" onclick="" type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
+                        
                         </div>
                     </div>
                 </form>
