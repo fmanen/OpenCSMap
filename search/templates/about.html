@@ -15,23 +15,26 @@
                     </h1>
                 </div>
                 <div class="card-body">
-                    <p>OpenCSMap is a system for geolocate Computer Science papers.
-                      Our main goal is to generate geograhical information about the papers and show
-                      how Computer Science research is advancing all over the world.
-                      How do we do this? Our work is based on <a href="https://dblp.org">DBLP</a> database. We used this
-                      data to find authors' affiliations, and then linked a paper with an
-                      affiliation, based on their authors information. For simplicity, we linked a paper
-                      with only one affiliation for now. We are looking forward to improve this in the future. :)
+                    <p>OpenCSMap is a system for geolocating Computer Science papers. Our main
+                      goal is to generate geographical information about such papers and show
+                      how Computer Science research is advancing all over the world. How do we
+                      do this? Our work is based primarily on the <a href="https://dblp.org">DBLP</a> database. We use this
+                      data to find authors' affiliations, and then associate a paper with a
+                      most likely affiliation based on the authors' information. We then link
+                      affiliations to <a href="https://wikidata.org">Wikidata</a> using Entity Linking (<a href="https://opentapioca.org/">OpenTapioca</a>), which
+                      allows us to extract geocoordinates for affiliations and papers. For
+                      simplicity, we associate a paper with only one affiliation for now. We
+                      are looking forward to improving this system in the future. :)
                     </p>
                     <h3>How does a search work?</h3>
-                    <p>Our search is a text search. The system looks the terms of interest on title of the papers, 
-                      title of journals and title of conferences.</p>
+                    <p>Our search is based on text. The system matches the terms of interest in
+                      the titles of the papers, journals and conferences.</p>
                     <h3>Why my paper isn't on the map?</h3>
                     <p>That's because we couldn't find an affiliation for any of the authors of the paper.</p>
                     <h3>Why some authors have a '000X' number next to their names?</h3>
                     <p>Because DBLP uses a number to diferentiate authors with the exact same name. </p>
                     <br>
-                    That's all for now. This the first version of system so please use
+                    That's all for now. This the first version of the system so please use
                     <a href="mailto:felipe.manen@dcc.uchile.cl">felipe.manen@dcc.uchile.cl</a> for all inquiries.
                     <br>
                     <br>
