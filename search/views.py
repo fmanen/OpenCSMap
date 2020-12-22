@@ -9,6 +9,8 @@ from collections import defaultdict
 
 from .forms import AdvancedSearchForm
 from .utils import create_advanced_query_body, create_simple_query_body, create_advanced_query_papers_body, simple_search_papers_results_body, create_all_research_query_body, simple_search_papers_all_results_body
+from .models import Search as SearchModel
+
 
 def advanced_search(request):
     years = range(1900,2021)
@@ -108,6 +110,11 @@ def simple_aggregations_search_view(request):
         except:
             break
 
+    search = SearchModel.objects.create(
+                topic=topic
+            )
+
+    search.save()
     return render(
         request,
         'results.html',
@@ -170,6 +177,17 @@ def aggregations_for_advanced_search_view(request):
             after = t.aggregations.my_buckets.after_key
         except:
             break
+
+    search = SearchModel.objects.create(
+                topic=topic,
+                author=authors,
+                results_by=results_by,
+                type_of_pub=type_of_pub,
+                from_date=from_date,
+                to_date=to_date
+            )
+
+    search.save()
 
     return render(request, 'advanced_search_results.html', {
         'affiliations':affiliations,
