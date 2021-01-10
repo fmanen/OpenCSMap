@@ -7,7 +7,8 @@ def create_simple_query_body(topic):
             "bool": {
             "should": [
             {"match":{ "title": {"query":topic, "operator": "and"}}},
-            {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}}
+            {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}},
+            {"match":{ "journal": {"query":topic, "operator": "and"}}}
             ],
             "minimum_should_match": 1,
             }
