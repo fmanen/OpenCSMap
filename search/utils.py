@@ -10,7 +10,7 @@ def create_simple_query_body(topic):
             {"match":{ "proceedingsName": {"query":topic, "operator": "and"}}},
             {"match":{ "journal": {"query":topic, "operator": "and"}}}
             ],
-            "minimum_should_match": 1,
+            "minimum_should_match": 1
             }
         },
         "aggs": {
@@ -63,8 +63,8 @@ def create_simple_query_body(topic):
 def create_advanced_query_body(topic, authors, results_by, type_of_pub, from_date, to_date):
 
 
-    must_topic = """"should": [{"match":{ "title": {"query":"%s", "operator": "and"}}}, {"match":{ "proceedingsName": {"query":"%s", "operator": "and"}}}], "minimum_should_match": 1, """ % (topic,topic)
-    print(must_topic)
+    must_topic = """"should": [{"match":{ "title": {"query":"%s", "operator": "and"}}}, {"match":{ "proceedingsName": {"query":"%s", "operator": "and"}}}, {"match":{ "journal": {"query":"%s", "operator": "and"}}}], "minimum_should_match": 1, """ % (topic,topic,topic)
+    
     if not authors:
         should_author = ""
     else:

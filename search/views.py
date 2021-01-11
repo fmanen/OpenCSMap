@@ -217,6 +217,8 @@ def simple_search_papers_results_view(request, topic, affiliation):
 
     top_author = t.aggregations.Authors.buckets[0].key
 
+    #TODO: top_author can be more than one
+
     return render(request, 'papers_results.html', {
         'results':results,
         'affiliation':affiliation,
