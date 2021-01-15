@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.search_index, name='search'),
     path('about', views.about, name='about'),
     path('results', views.simple_aggregations_search_view, name='results'),
+    path('results/<str:topic>', views.simple_aggregations_search_view_get, name='results'),
     path('advanced_search', views.advanced_search, name='advanced_search'),
     path('all_research', views.all_research, name='all_research'),
     path('advanced_search_results', views.aggregations_for_advanced_search_view, name='advanced_search_results'),

@@ -11,6 +11,7 @@ from .forms import AdvancedSearchForm
 from .utils import create_advanced_query_body, create_simple_query_body, create_advanced_query_papers_body, simple_search_papers_results_body, create_all_research_query_body, simple_search_papers_all_results_body
 from .models import Search as SearchModel
 
+import time
 
 def advanced_search(request):
     years = range(1900,2021)
@@ -66,7 +67,66 @@ def all_research(request):
         )
 
 
+def simple_aggregations_search_view_get(request, topic):
+    start_time = time.time()
+
+    l = 0
+    n = 0
+    client = Elasticsearch()
+    body = create_simple_query_body(topic)
+    s = Search(using=client, index="papers_def").update_from_dict(body)
+
+    t = s.execute()
+    aggs = t.aggregations.my_buckets.buckets
+    affiliations = [aggs]
+
+    for aff in aggs:
+        n += aff.doc_count
+    l += len(aggs)
+
+    try:
+        after = t.aggregations.my_buckets.after_key
+    except:
+        after = ""
+
+    while after:
+        body['aggs']['my_buckets']['composite']['after'] = after
+        s = Search(using=client, index="papers_def").update_from_dict(body)
+        t = s.execute()
+
+        aggs = t.aggregations.my_buckets.buckets
+        affiliations.append(aggs)
+        for aff in aggs:
+            n += aff.doc_count
+        l += len(aggs)
+
+        try:
+            after = t.aggregations.my_buckets.after_key
+        except:
+            break
+
+    search = SearchModel.objects.create(
+                topic=topic
+            )
+
+    search.save()
+    
+    total_time = time.time()-start_time
+    return render(
+        request,
+        'results.html',
+        {
+            'total_time':total_time,
+            'affiliations':affiliations,
+            'topic':topic,
+            'n_affiliations':format(l,',d'),
+            'n_papers':format(n,',d')
+        }
+        )
+
+
 def simple_aggregations_search_view(request):
+    start_time = time.time()
     if request.POST:
         topic = request.POST.get('topic')
 
@@ -115,10 +175,13 @@ def simple_aggregations_search_view(request):
             )
 
     search.save()
+    
+    total_time = time.time()-start_time
     return render(
         request,
         'results.html',
         {
+            'total_time':total_time,
             'affiliations':affiliations,
             'topic':topic,
             'n_affiliations':format(l,',d'),
