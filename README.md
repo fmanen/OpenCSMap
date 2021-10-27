@@ -58,7 +58,7 @@ This process may take a while. Progress will be shown in the shell. When indexin
 
 3) Django
 
-Now that Elasticsearch is ready we can run our Django project. For doing this you need to go to the folder that contains OpenCSMap>manager.py file. In the terminal, run:
+Now that Elasticsearch is ready we can run our Django project. For doing this you need to go to backend>OpenCSMap. In the terminal, run:
 
 `python manage.py migrate`
 
