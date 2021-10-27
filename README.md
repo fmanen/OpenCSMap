@@ -50,11 +50,11 @@ Now that Elasticsearch is installed we need to create our DBLP papers index. For
 
 If response in shell is something like "acknowledged" : true, ..." everything should be okay. Go to http://localhost:9200/_cat/indices and check if papers index is available.
 
-Now for indexing the data we need to go to elasticsearch>data. There is a Python file that run a script that indexes all the data we need. Data is available here. You can go with full data or a sample. When downloading the file you want, put it on the same folder as index_es.py file. Then from the shell just run:
+Now for indexing the data we need to go to elasticsearch>data. There is a Python file that run a script that indexes a sample of the data. Data is available here as well (dblp.txt). Then from the shell just run:
 
 `python index_es.py dblp.txt`
 
-This process may take a while. Progress will be shown in the shell. When indexing is finished, you can go to http://localhost:9200/papers/_count and check that field 'count' is greater than 0. If you use full data it must be near 5M and if you use sample data it may be 500.
+This process may take a while. Progress will be shown in the shell. When indexing is finished, you can go to http://localhost:9200/papers/_count and check that field 'count' is greater than 0.
 
 3) Django
 
