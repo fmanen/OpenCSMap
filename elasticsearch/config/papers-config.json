@@ -1,0 +1,263 @@
+{
+  "settings" : {
+    "number_of_shards" : 5,
+    "number_of_replicas" : 0,
+    "index": {
+      "analysis": {
+        "filter": {
+          "english_stop": {
+            "type": "stop", 
+            "stopwords":  "_english_"
+          },
+          "english_stemmer": {
+            "type": "stemmer", 
+            "language": "english"
+          }
+        },
+        "normalizer": {
+           "lowercase": { "type": "custom", "filter": ["lowercase"] }
+        },
+        "analyzer": {
+          "lowercase": {
+            "tokenizer":  "keyword", 
+            "filter": ["lowercase"]
+          },
+          "english": {
+            "tokenizer":  "standard", 
+            "filter": [
+              "lowercase", 
+              "english_stop", 
+              "english_stemmer"
+            ]
+          },
+          "english_with_synonyms": {
+            "tokenizer":  "standard", 
+            "filter": [
+              "lowercase", 
+              "english_stop",
+              "english_stemmer"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "paper": {
+      "dynamic" : "false",
+      "properties": {
+
+        "title": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+
+        "year": {
+          "type": "integer", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+
+        "booktitle": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+        
+        "journal": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+        
+        "affiliation_name": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+        
+        "city": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+        
+        "affLat": {
+          "type": "float", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+        "affLong": {
+          "type": "float", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+        "cityLat": {
+          "type": "float", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+        "cityLong": {
+          "type": "float", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+        "countryLat": {
+          "type": "float", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+        "countryLong": {
+          "type": "float", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+        
+        "doi": {
+          "type": "keyword", 
+          "fields": {
+            "text": {
+              "type" : "text"
+            }
+          }
+        },
+
+
+        "authors": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+
+        "country": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+        "proceedingsName": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        },
+
+        "type": {
+          "type": "text", 
+          "fields": {
+            "english": {
+              "type" : "text", 
+              "analyzer": "english", 
+              "search_analyzer": "english_with_synonyms"
+            },
+            "normalized": {
+              "type" : "keyword", 
+              "normalizer": "lowercase"
+            },
+            "raw": { "type" : "keyword" }
+          }
+        }
+      }
+    }
+  }
+}

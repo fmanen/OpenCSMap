@@ -1,0 +1,141 @@
+ {% extends "base.html" %} {% load static %} {% block all_search_item %} {% if all %}
+<li class="nav-item active">
+    {% endif %} {% endblock %} {% block content %}
+
+    <head>
+
+        <title>OpenCSMap</title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+        <style>
+            #mapid {
+                width: 100px;
+                height: 500px;
+                min-height: 100%;
+                min-width: 100%;
+                display: block;
+            }
+            
+            html,
+            body {
+                height: 100%;
+            }
+            
+            .fill {
+                min-height: 100%;
+                height: 100%;
+                width: 100%;
+                min-width: 100%;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <br>
+        <header class="text-black">
+            <div class="overlay"></div>
+            <div class="container fill">
+                <div class="row">
+                    <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <h4>Showing affiliations worldwide {{ total_time }}</h4>
+                                <div class="row">
+                                    {% if topic %}
+                                    <div class="col-lg-4">
+                                        <p><b>Research topic:</b> {{ topic }}</p>
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-lg-4">
+                                        <p><b>Affiliations found:</b> {{ n_affiliations }}</p>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p><b>Papers found:</b> {{ n_papers }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <div class="row">
+                        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                            <div id="mapid"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </header>
+        <script>
+            var t0 = performance.now()
+
+
+
+
+            var mymap = L.map('mapid', {
+                tap: false
+            }).setView([30.505, -0.09], 1);
+
+            L.tileLayer('https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}.png?key=j26Xort1C7baPtVSimjh', {
+                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+            }).addTo(mymap);
+            var markers = L.markerClusterGroup();
+
+            { %
+                for l in affiliations %
+            } { %
+                for affiliation in l %
+            }
+
+            marker = L.marker([{
+                {
+                    affiliation.key.Lat
+                }
+            }, {
+                {
+                    affiliation.key.Long
+                }
+            }])
+
+            { %
+                if all %
+            }
+            marker.bindPopup(`<b>{{affiliation.key.Affiliation}}</b>
+                          <br />{{affiliation.key.City}},
+                          {{affiliation.key.Country}}<br />
+                          <a href="{% url 'search:simple_search_papers_results' affiliation.key.Affiliation %}"">{{affiliation.doc_count}} {% if affiliation.doc_count == 1 %} result. {% else %} results. {% endif %}</a>
+                        `); { %
+                else %
+            }
+            marker.bindPopup(`<b>{{affiliation.key.Affiliation}}</b>
+                          <br />{{affiliation.key.City}},
+                          {{affiliation.key.Country}}<br />
+                          <a href="{% url 'search:simple_search_papers_results' topic affiliation.key.Affiliation %}"">{{affiliation.doc_count}} {% if affiliation.doc_count == 1 %} result. {% else %} results. {% endif %}</a>
+                        `); { % endif %
+            }
+
+            markers.addLayer(marker);
+
+            { % endfor %
+            } { % endfor %
+            }
+            mymap.addLayer(markers);
+            var mapmargin = 50;
+
+
+            var t1 = performance.now()
+            console.log("{{topic}}")
+        </script>
+    </body>
+
+    {% endblock %}
