@@ -54,7 +54,7 @@ Now for indexing the data we need to go to elasticsearch>data. There is a Python
 
 `python index_es.py dblp.txt`
 
-This process may take a while. Progress will be shown in the shell. When indexing is finished, you can go to http://localhost:9200/papers/_count and check that field 'count' is greater than 0.
+This process may take a while. Progress will be shown in the shell. When indexing is finished, you can go to http://localhost:9200/papers/_count and check that field 'count' is 	150000.
 
 3) Django
 
@@ -67,6 +67,16 @@ That will create our models. They are not important in general but they are usef
 `python manage.py runserver`
 
 This will run the server on http://localhost:8000 . And that's all, now OpenCSMap is running in your machine.
+
+4) Examples
+
+In examples folders, you can find OpenTapioca and Wikidata query examples. To run them you just need to do in a shell:
+
+`python opentapioca.py`
+
+`python wikidata.py`
+
+The first one retrieves Wikidata id from an entity found in a string. The second one retrieves geographic information of a wd:XXXXX Wikidata id string. Will work better with an affiliation like Harvard University.
 
 ## Acknowledgments
 
