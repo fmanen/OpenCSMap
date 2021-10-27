@@ -1,6 +1,6 @@
 # OpenCSMap
 
-OpenCSMap is a system that reveals how Computer Science research is advancing all over the world. This system is intended to be a tool for researchers of CS to look for places to continue their careers (apply for jobs, PhD, MSc, etc.) or for linking with other researchers that may be near in the map and thus collaborate in better ways. 
+OpenCSMap is a system that reveals how Computer Science research is advancing all over the world. This system is intended to be a tool for researchers of CS to look for places to continue their careers (apply for jobs, PhD, MSc, etc.) or for linking with other researchers that may be near in the map and can collaborate. 
 
 This system is divided in two parts. The first part was related to extracting and manipulating data from DBLP. We used XML snapshots available on their website and we linked authors-papers-affiliations. Then, we used OpenTapioca (Entity Linking) for obtaining structured data related to affiliations. OpenTapioca links to Wikidata entities so then we queried data from this knowledge base, taking as result coordinates of the affiliations, cities and countries. You can find example scripts in OpenTapioca and Wikidata folders.
 
